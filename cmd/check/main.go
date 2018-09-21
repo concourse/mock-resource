@@ -35,7 +35,7 @@ func main() {
 		response = append(response, *req.Version)
 	} else if !req.Source.NoInitialVersion {
 		response = append(response, resource.Version{
-			Version: "mirror",
+			Version: req.Source.InitialVersion(),
 		})
 	}
 
