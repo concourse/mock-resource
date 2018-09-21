@@ -61,7 +61,7 @@ func main() {
 		replicateTo(filepath.Join(dest, "rootfs"))
 
 		encTo(filepath.Join(dest, "metadata.json"), ImageMetadata{
-			Env:  []string{"VERSION=" + req.Version.Version},
+			Env:  []string{"MIRRORED_VERSION=" + req.Version.Version},
 			User: "root",
 		})
 	}

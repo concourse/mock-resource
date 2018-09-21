@@ -1,5 +1,7 @@
 package resource
 
+import "os"
+
 const DefaultInitialVersion = "mirror"
 
 type Source struct {
@@ -8,18 +10,23 @@ type Source struct {
 
 	// initial version that the mirrored resource image should emit from /check
 	// (default: 'mirror')
-	RawInitialVersion string `json:"mirrored_version"`
+	RawInitialVersion string `json:"initial_version"`
 
 	// don't emit an initial version; useful for testing pipeline triggering
 	NoInitialVersion bool `json:"no_initial_version"`
 }
 
 func (s Source) InitialVersion() string {
-	if s.RawInitialVersion == "" {
-		return DefaultInitialVersion
+	if s.RawInitialVersion != "" {
+		return s.RawInitialVersion
 	}
 
-	return s.RawInitialVersion
+	fromEnv := os.Getenv("MIRRORED_VERSION")
+	if fromEnv != "" {
+		return fromEnv
+	}
+
+	return DefaultInitialVersion
 }
 
 type Version struct {
