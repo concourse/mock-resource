@@ -39,6 +39,11 @@ type GetParams struct {
 	MirrorSelfViaParams bool `json:"mirror_self_via_params"`
 }
 
+type PutParams struct {
+	// version to "create"
+	Version string `json:"version"`
+}
+
 type MetadataField struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`

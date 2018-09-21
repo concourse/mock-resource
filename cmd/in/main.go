@@ -49,6 +49,8 @@ func main() {
 
 	dest := os.Args[1]
 
+	logrus.Printf("fetching version: %s", req.Version.Version)
+
 	versionFile := filepath.Join(dest, "version")
 	err = ioutil.WriteFile(versionFile, []byte(req.Version.Version+"\n"), os.ModePerm)
 	if err != nil {
@@ -58,6 +60,10 @@ func main() {
 	}
 
 	if req.Source.MirrorSelf || req.Params.MirrorSelfViaParams {
+		logrus.WithFields(logrus.Fields{
+			"via_params": req.Params.MirrorSelfViaParams,
+		}).Printf("mirroring self image")
+
 		replicateTo(filepath.Join(dest, "rootfs"))
 
 		encTo(filepath.Join(dest, "metadata.json"), ImageMetadata{
