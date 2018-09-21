@@ -12,8 +12,9 @@ import (
 )
 
 type InRequest struct {
-	Source  resource.Source  `json:"source"`
-	Version resource.Version `json:"version"`
+	Source  resource.Source    `json:"source"`
+	Version resource.Version   `json:"version"`
+	Params  resource.GetParams `json:"params"`
 }
 
 type InResponse struct {
@@ -56,7 +57,7 @@ func main() {
 		return
 	}
 
-	if req.Source.FetchImage {
+	if req.Source.MirrorSelf || req.Params.MirrorSelfViaParams {
 		replicateTo(filepath.Join(dest, "rootfs"))
 
 		encTo(filepath.Join(dest, "metadata.json"), ImageMetadata{
