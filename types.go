@@ -15,6 +15,9 @@ type Source struct {
 	// don't emit an initial version; useful for testing pipeline triggering
 	NoInitialVersion bool `json:"no_initial_version"`
 
+	// version to emit regardless of any version specified during check
+	ForceVersion string `json:"force_version"`
+
 	// a map of file paths to create with the associated contents
 	//
 	// contents can either be a string or an arbitrary object (which will be

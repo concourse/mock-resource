@@ -34,7 +34,11 @@ func main() {
 
 	response := CheckResponse{}
 
-	if req.Version != nil {
+	if req.Source.ForceVersion != "" {
+		response = append(response, resource.Version{
+			Version: req.Source.ForceVersion,
+		})
+	} else if req.Version != nil {
 		response = append(response, *req.Version)
 	} else if !req.Source.NoInitialVersion {
 		response = append(response, resource.Version{
