@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"time"
 
 	resource "github.com/concourse/mock-resource"
 	"github.com/sirupsen/logrus"
@@ -28,6 +29,23 @@ func main() {
 	err := decoder.Decode(&req)
 	if err != nil {
 		logrus.Errorf("invalid payload: %s", err)
+		os.Exit(1)
+		return
+	}
+
+	if req.Source.CheckDelay != "" {
+		delay, err := time.ParseDuration(req.Source.CheckDelay)
+		if err != nil {
+			logrus.Errorf("malformed check_delay duration (%s): %s", req.Source.CheckDelay, err)
+			os.Exit(1)
+			return
+		}
+
+		time.Sleep(delay)
+	}
+
+	if req.Source.CheckFailure != "" {
+		logrus.Errorf("intentionally failing to check: %s", req.Source.CheckFailure)
 		os.Exit(1)
 		return
 	}

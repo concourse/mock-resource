@@ -23,6 +23,13 @@ type Source struct {
 	// contents can either be a string or an arbitrary object (which will be
 	// JSON-marshalled)
 	CreateFiles map[string]interface{} `json:"create_files"`
+
+	// an amount of time (in Go duration format) to sleep before the check
+	// returns versions
+	CheckDelay string `json:"check_delay"`
+
+	// force checking to fail with this message on stderr
+	CheckFailure string `json:"check_failure"`
 }
 
 func (s Source) InitialVersion() string {
