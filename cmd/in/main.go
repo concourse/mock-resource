@@ -72,6 +72,48 @@ func main() {
 		})
 	}
 
+	files := map[string]interface{}{}
+
+	for path, content := range req.Source.CreateFiles {
+		files[path] = content
+	}
+
+	for path, content := range req.Params.CreateFiles {
+		files[path] = content
+	}
+
+	for path, content := range files {
+		var bs []byte
+
+		if str, ok := content.(string); ok {
+			bs = []byte(str)
+		} else {
+			var err error
+			bs, err = json.Marshal(content)
+			if err != nil {
+				logrus.Errorf("failed to marshal content (%v): %s", content, err)
+				os.Exit(1)
+				return
+			}
+		}
+
+		filePath := filepath.Join(dest, path)
+
+		err = os.MkdirAll(filepath.Dir(filePath), 0755)
+		if err != nil {
+			logrus.Errorf("failed to create directory '%s': %s", filepath.Dir(filePath), err)
+			os.Exit(1)
+			return
+		}
+
+		err = ioutil.WriteFile(filePath, bs, 0644)
+		if err != nil {
+			logrus.Errorf("failed to write to file '%s': %s", path, err)
+			os.Exit(1)
+			return
+		}
+	}
+
 	json.NewEncoder(os.Stdout).Encode(InResponse{
 		Version:  req.Version,
 		Metadata: []resource.MetadataField{},

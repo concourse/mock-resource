@@ -14,6 +14,12 @@ type Source struct {
 
 	// don't emit an initial version; useful for testing pipeline triggering
 	NoInitialVersion bool `json:"no_initial_version"`
+
+	// a map of file paths to create with the associated contents
+	//
+	// contents can either be a string or an arbitrary object (which will be
+	// JSON-marshalled)
+	CreateFiles map[string]interface{} `json:"create_files"`
 }
 
 func (s Source) InitialVersion() string {
@@ -34,9 +40,12 @@ type Version struct {
 }
 
 type GetParams struct {
-	// same as configuring MirrorSelf in source, but in params, so that we can
-	// test params are respected in places
+	// same as configuring mirror_self in source, but in params
 	MirrorSelfViaParams bool `json:"mirror_self_via_params"`
+
+	// similar to create_files in source; merged in so that additional (or
+	// replaced) files can be specified
+	CreateFiles map[string]interface{} `json:"create_files_via_params"`
 }
 
 type PutParams struct {
