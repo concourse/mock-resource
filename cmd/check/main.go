@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	resource "github.com/concourse/mirror-resource"
+	resource "github.com/concourse/mock-resource"
 	"github.com/sirupsen/logrus"
 )
 

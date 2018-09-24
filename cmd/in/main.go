@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	resource "github.com/concourse/mirror-resource"
+	resource "github.com/concourse/mock-resource"
 	"github.com/sirupsen/logrus"
 )
 

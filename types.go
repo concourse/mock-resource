@@ -2,14 +2,14 @@ package resource
 
 import "os"
 
-const DefaultInitialVersion = "mirror"
+const DefaultInitialVersion = "mock"
 
 type Source struct {
 	// fetch the resource itself as an image
 	MirrorSelf bool `json:"mirror_self"`
 
-	// initial version that the mirrored resource image should emit from /check
-	// (default: 'mirror')
+	// initial version that the resource should emit from /check
+	// (default: 'mock')
 	RawInitialVersion string `json:"initial_version"`
 
 	// don't emit an initial version; useful for testing pipeline triggering
