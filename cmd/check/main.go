@@ -21,8 +21,11 @@ func main() {
 		ForceColors: true,
 	})
 
+	decoder := json.NewDecoder(os.Stdin)
+	decoder.DisallowUnknownFields()
+
 	var req CheckRequest
-	err := json.NewDecoder(os.Stdin).Decode(&req)
+	err := decoder.Decode(&req)
 	if err != nil {
 		logrus.Errorf("invalid payload: %s", err)
 		os.Exit(1)
