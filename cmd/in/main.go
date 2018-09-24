@@ -52,6 +52,19 @@ func main() {
 
 	dest := os.Args[1]
 
+	privileged, err := resource.IsPrivileged()
+	if err != nil {
+		logrus.Errorf("could not check privilege: %s", err)
+		os.Exit(1)
+		return
+	}
+
+	if privileged {
+		logrus.Printf("fetching in a privileged container")
+	}
+
+	encTo(filepath.Join(dest, "privileged"), privileged)
+
 	logrus.Printf("fetching version: %s", req.Version.Version)
 
 	versionFile := filepath.Join(dest, "version")

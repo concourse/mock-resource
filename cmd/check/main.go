@@ -64,5 +64,19 @@ func main() {
 		})
 	}
 
+	privileged, err := resource.IsPrivileged()
+	if err != nil {
+		logrus.Errorf("could not check privilege: %s", err)
+		os.Exit(1)
+		return
+	}
+
+	if privileged {
+		for i := range response {
+			// must be updated inline
+			response[i].Privileged = "true"
+		}
+	}
+
 	json.NewEncoder(os.Stdout).Encode(response)
 }

@@ -42,10 +42,24 @@ func main() {
 		return
 	}
 
+	privileged, err := resource.IsPrivileged()
+	if err != nil {
+		logrus.Errorf("could not check privilege: %s", err)
+		os.Exit(1)
+		return
+	}
+
+	version := resource.Version{Version: req.Params.Version}
+
+	if privileged {
+		logrus.Printf("pushing in a privileged container")
+		version.Privileged = "true"
+	}
+
 	logrus.Printf("pushing version: %s", req.Params.Version)
 
 	json.NewEncoder(os.Stdout).Encode(OutResponse{
-		Version:  resource.Version{Version: req.Params.Version},
+		Version:  version,
 		Metadata: []resource.MetadataField{},
 	})
 }
