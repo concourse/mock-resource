@@ -30,6 +30,8 @@ type Source struct {
 
 	// force checking to fail with this message on stderr
 	CheckFailure string `json:"check_failure"`
+
+	Metadata []MetadataField `json:"metadata"`
 }
 
 func (s Source) InitialVersion() string {

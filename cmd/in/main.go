@@ -36,7 +36,11 @@ func main() {
 	decoder := json.NewDecoder(os.Stdin)
 	decoder.DisallowUnknownFields()
 
-	var req InRequest
+	req := InRequest{
+		Source: resource.Source{
+			Metadata: []resource.MetadataField{},
+		},
+	}
 	err := decoder.Decode(&req)
 	if err != nil {
 		logrus.Errorf("invalid payload: %s", err)
@@ -132,7 +136,7 @@ func main() {
 
 	json.NewEncoder(os.Stdout).Encode(InResponse{
 		Version:  req.Version,
-		Metadata: []resource.MetadataField{},
+		Metadata: req.Source.Metadata,
 	})
 }
 
