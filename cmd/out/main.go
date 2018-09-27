@@ -60,6 +60,6 @@ func main() {
 
 	json.NewEncoder(os.Stdout).Encode(OutResponse{
 		Version:  version,
-		Metadata: []resource.MetadataField{},
+		Metadata: req.Source.Metadata,
 	})
 }

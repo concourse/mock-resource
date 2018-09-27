@@ -30,6 +30,9 @@ type Source struct {
 
 	// force checking to fail with this message on stderr
 	CheckFailure string `json:"check_failure"`
+
+	// hardcoded metadata values to return on every get and put
+	Metadata []MetadataField `json:"metadata"`
 }
 
 func (s Source) InitialVersion() string {
