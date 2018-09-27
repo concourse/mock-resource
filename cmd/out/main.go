@@ -28,11 +28,7 @@ func main() {
 	decoder := json.NewDecoder(os.Stdin)
 	decoder.DisallowUnknownFields()
 
-	req := OutRequest{
-		Source: resource.Source{
-			Metadata: []resource.MetadataField{},
-		},
-	}
+	var req OutRequest
 	err := decoder.Decode(&req)
 	if err != nil {
 		logrus.Errorf("invalid payload: %s", err)
