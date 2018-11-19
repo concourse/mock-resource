@@ -58,6 +58,12 @@ func main() {
 
 	logrus.Printf("pushing version: %s", req.Params.Version)
 
+	if req.Params.PrintEnv {
+		for _, e := range os.Environ() {
+			logrus.Printf("env: %s", e)
+		}
+	}
+
 	json.NewEncoder(os.Stdout).Encode(OutResponse{
 		Version:  version,
 		Metadata: req.Source.Metadata,

@@ -68,6 +68,9 @@ type GetParams struct {
 type PutParams struct {
 	// version to "create"
 	Version string `json:"version"`
+
+	// print all env vars to stdout
+	PrintEnv bool `json:"print_env"`
 }
 
 type MetadataField struct {
