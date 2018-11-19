@@ -39,14 +39,12 @@ func main() {
 	var req InRequest
 	err := decoder.Decode(&req)
 	if err != nil {
-		logrus.Errorf("invalid payload: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("invalid payload: %s", err)
 		return
 	}
 
 	if len(os.Args) < 2 {
-		logrus.Errorf("destination path not specified")
-		os.Exit(1)
+		logrus.Fatal("destination path not specified")
 		return
 	}
 
@@ -54,8 +52,7 @@ func main() {
 
 	privileged, err := resource.IsPrivileged()
 	if err != nil {
-		logrus.Errorf("could not check privilege: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("could not check privilege: %s", err)
 		return
 	}
 
@@ -70,8 +67,7 @@ func main() {
 	versionFile := filepath.Join(dest, "version")
 	err = ioutil.WriteFile(versionFile, []byte(req.Version.Version+"\n"), os.ModePerm)
 	if err != nil {
-		logrus.Errorf("failed to write version file: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("failed to write version file: %s", err)
 		return
 	}
 
@@ -107,8 +103,7 @@ func main() {
 			var err error
 			bs, err = json.Marshal(content)
 			if err != nil {
-				logrus.Errorf("failed to marshal content (%v): %s", content, err)
-				os.Exit(1)
+				logrus.Fatalf("failed to marshal content (%v): %s", content, err)
 				return
 			}
 		}
@@ -117,15 +112,13 @@ func main() {
 
 		err = os.MkdirAll(filepath.Dir(filePath), 0755)
 		if err != nil {
-			logrus.Errorf("failed to create directory '%s': %s", filepath.Dir(filePath), err)
-			os.Exit(1)
+			logrus.Fatalf("failed to create directory '%s': %s", filepath.Dir(filePath), err)
 			return
 		}
 
 		err = ioutil.WriteFile(filePath, bs, 0644)
 		if err != nil {
-			logrus.Errorf("failed to write to file '%s': %s", path, err)
-			os.Exit(1)
+			logrus.Fatalf("failed to write to file '%s': %s", path, err)
 			return
 		}
 	}
@@ -139,15 +132,13 @@ func main() {
 func replicateTo(rootfs string) {
 	err := os.MkdirAll(rootfs, os.ModePerm)
 	if err != nil {
-		logrus.Errorf("failed to create rootfs dir: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("failed to create rootfs dir: %s", err)
 		return
 	}
 
 	dirs, err := ioutil.ReadDir("/")
 	if err != nil {
-		logrus.Errorf("failed to read /: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("failed to read /: %s", err)
 		return
 	}
 
@@ -159,8 +150,7 @@ func replicateTo(rootfs string) {
 			// prevent recursing and copying wacky stuff
 			err := os.MkdirAll(rootfsDst, d.Mode())
 			if err != nil {
-				logrus.Errorf("failed to create %s: %s", rootfsDst, err)
-				os.Exit(1)
+				logrus.Fatalf("failed to create %s: %s", rootfsDst, err)
 				return
 			}
 
@@ -173,8 +163,7 @@ func replicateTo(rootfs string) {
 		cp.Stderr = os.Stderr
 		err := cp.Run()
 		if err != nil {
-			logrus.Errorf("failed to copy from %s to %s: %s", src, rootfsDst, err)
-			os.Exit(1)
+			logrus.Fatalf("failed to copy from %s to %s: %s", src, rootfsDst, err)
 			return
 		}
 	}
@@ -183,22 +172,19 @@ func replicateTo(rootfs string) {
 func encTo(path string, js interface{}) {
 	meta, err := os.Create(path)
 	if err != nil {
-		logrus.Errorf("failed to create %s: %s", path, err)
-		os.Exit(1)
+		logrus.Fatalf("failed to create %s: %s", path, err)
 		return
 	}
 
 	err = json.NewEncoder(meta).Encode(js)
 	if err != nil {
-		logrus.Errorf("failed to write %s: %s", path, err)
-		os.Exit(1)
+		logrus.Fatalf("failed to write %s: %s", path, err)
 		return
 	}
 
 	err = meta.Close()
 	if err != nil {
-		logrus.Errorf("failed to close %s: %s", path, err)
-		os.Exit(1)
+		logrus.Fatalf("failed to close %s: %s", path, err)
 		return
 	}
 }

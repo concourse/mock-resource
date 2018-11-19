@@ -28,16 +28,14 @@ func main() {
 	var req CheckRequest
 	err := decoder.Decode(&req)
 	if err != nil {
-		logrus.Errorf("invalid payload: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("invalid payload: %s", err)
 		return
 	}
 
 	if req.Source.CheckDelay != "" {
 		delay, err := time.ParseDuration(req.Source.CheckDelay)
 		if err != nil {
-			logrus.Errorf("malformed check_delay duration (%s): %s", req.Source.CheckDelay, err)
-			os.Exit(1)
+			logrus.Fatalf("malformed check_delay duration (%s): %s", req.Source.CheckDelay, err)
 			return
 		}
 
@@ -45,8 +43,7 @@ func main() {
 	}
 
 	if req.Source.CheckFailure != "" {
-		logrus.Errorf("intentionally failing to check: %s", req.Source.CheckFailure)
-		os.Exit(1)
+		logrus.Fatalf("intentionally failing to check: %s", req.Source.CheckFailure)
 		return
 	}
 
@@ -66,8 +63,7 @@ func main() {
 
 	privileged, err := resource.IsPrivileged()
 	if err != nil {
-		logrus.Errorf("could not check privilege: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("could not check privilege: %s", err)
 		return
 	}
 

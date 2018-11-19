@@ -31,14 +31,13 @@ func main() {
 	var req OutRequest
 	err := decoder.Decode(&req)
 	if err != nil {
-		logrus.Errorf("invalid payload: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("invalid payload: %s", err)
 		return
 	}
 
 	if len(os.Args) < 2 {
-		logrus.Errorf("source path not specified")
-		os.Exit(1)
+		logrus.Fatal("source path not specified")
+		return
 	}
 
 	if req.Params.Version == "" {
@@ -48,8 +47,7 @@ func main() {
 
 	privileged, err := resource.IsPrivileged()
 	if err != nil {
-		logrus.Errorf("could not check privilege: %s", err)
-		os.Exit(1)
+		logrus.Fatalf("could not check privilege: %s", err)
 		return
 	}
 
