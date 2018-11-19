@@ -39,6 +39,10 @@ func main() {
 	if len(os.Args) < 2 {
 		logrus.Errorf("source path not specified")
 		os.Exit(1)
+	}
+
+	if req.Params.Version == "" {
+		logrus.Fatal("no version specified")
 		return
 	}
 
@@ -49,14 +53,16 @@ func main() {
 		return
 	}
 
-	version := resource.Version{Version: req.Params.Version}
+	version := resource.Version{
+		Version: req.Params.Version,
+	}
 
 	if privileged {
 		logrus.Printf("pushing in a privileged container")
 		version.Privileged = "true"
 	}
 
-	logrus.Printf("pushing version: %s", req.Params.Version)
+	logrus.Printf("pushing version: %s", version.Version)
 
 	if req.Params.PrintEnv {
 		for _, e := range os.Environ() {
