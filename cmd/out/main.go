@@ -40,6 +40,11 @@ func main() {
 		return
 	}
 
+	if os.Args[1] == "" {
+		logrus.Fatal("source path is empty")
+		return
+	}
+
 	if req.Params.Version == "" {
 		logrus.Fatal("no version specified")
 		return
