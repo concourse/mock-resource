@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	resource "github.com/concourse/mock-resource"
 	"github.com/sirupsen/logrus"
@@ -107,6 +108,11 @@ func main() {
 				return
 			}
 		}
+
+		str := string(bs)
+		str = strings.ReplaceAll(str, "START_VAR", "((")
+		str = strings.ReplaceAll(str, "END_VAR", "))")
+		bs = []byte(str)
 
 		filePath := filepath.Join(dest, path)
 
