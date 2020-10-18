@@ -33,6 +33,9 @@ type Source struct {
 
 	// hardcoded metadata values to return on every get and put
 	Metadata []MetadataField `json:"metadata"`
+
+	// print a message on every action
+	Log string `json:"log"`
 }
 
 func (s Source) InitialVersion() string {

@@ -51,6 +51,10 @@ func main() {
 
 	dest := os.Args[1]
 
+	if req.Source.Log != "" {
+		logrus.Info(req.Source.Log)
+	}
+
 	privileged, err := resource.IsPrivileged()
 	if err != nil {
 		logrus.Fatalf("could not check privilege: %s", err)

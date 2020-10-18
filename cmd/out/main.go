@@ -45,6 +45,10 @@ func main() {
 		return
 	}
 
+	if req.Source.Log != "" {
+		logrus.Info(req.Source.Log)
+	}
+
 	if req.Params.Version == "" {
 		logrus.Fatal("no version specified")
 		return

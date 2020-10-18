@@ -32,6 +32,10 @@ func main() {
 		return
 	}
 
+	if req.Source.Log != "" {
+		logrus.Info(req.Source.Log)
+	}
+
 	if req.Source.CheckDelay != "" {
 		delay, err := time.ParseDuration(req.Source.CheckDelay)
 		if err != nil {
