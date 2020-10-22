@@ -10,4 +10,4 @@ RUN go build -o /assets/check ./cmd/check
 FROM ubuntu:bionic AS resource
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
-RUN apt-get update && apt-get -y -u install wget
+RUN apt-get update && apt-get -y install wget netcat-openbsd
