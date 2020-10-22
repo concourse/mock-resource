@@ -10,3 +10,4 @@ RUN go build -o /assets/check ./cmd/check
 FROM alpine:edge
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
+RUN apk --no-cache add bash wget
