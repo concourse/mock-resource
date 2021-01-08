@@ -7,6 +7,10 @@ RUN go build -o /assets/in ./cmd/in
 RUN go build -o /assets/out ./cmd/out
 RUN go build -o /assets/check ./cmd/check
 
+# there are no tests, but all resources must have a 'tests' target, so just
+# no-op
+FROM scratch AS tests
+
 FROM alpine:edge
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
