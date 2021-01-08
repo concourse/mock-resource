@@ -1,3 +1,5 @@
+ARG base_image=ubuntu:bionic
+
 FROM concourse/golang-builder as builder
 COPY . /src
 WORKDIR /src
@@ -11,7 +13,7 @@ RUN go build -o /assets/check ./cmd/check
 # no-op
 FROM scratch AS tests
 
-FROM ubuntu:bionic AS resource
+FROM ${base_image} AS resource
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
 RUN apt-get update && apt-get -y install wget netcat-openbsd

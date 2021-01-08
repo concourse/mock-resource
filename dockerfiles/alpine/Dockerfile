@@ -1,3 +1,5 @@
+ARG base_image=alpine:edge
+
 FROM golang:1 as builder
 COPY . /src
 WORKDIR /src
@@ -11,7 +13,7 @@ RUN go build -o /assets/check ./cmd/check
 # no-op
 FROM scratch AS tests
 
-FROM alpine:edge
+FROM ${base_image}
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
 RUN apk --no-cache add bash wget netcat-openbsd
