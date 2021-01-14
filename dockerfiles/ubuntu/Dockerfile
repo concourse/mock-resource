@@ -1,6 +1,7 @@
-ARG base_image=ubuntu:bionic
+ARG base_image
+ARG builder_image=concourse/golang-builder
 
-FROM concourse/golang-builder as builder
+FROM ${builder_image} as builder
 COPY . /src
 WORKDIR /src
 ENV CGO_ENABLED 0

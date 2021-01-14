@@ -1,6 +1,7 @@
-ARG base_image=alpine:edge
+ARG base_image=alpine:latest
+ARG builder_image=concourse/golang-builder
 
-FROM golang:1 as builder
+FROM ${builder_image} as builder
 COPY . /src
 WORKDIR /src
 ENV CGO_ENABLED 0
