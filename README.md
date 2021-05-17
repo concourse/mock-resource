@@ -50,11 +50,25 @@ If `force_version` is set, then only that version will ever be emitted, otherwis
 
 Since the mock resource is included as a base resource type, it can be used as the image for a task without requiring internet connection (unlike registry-image resource). It can also be used to create files without requiring external state.
 
+#### Parameters
+
 * `mirror_self_via_params`: Same as configuring `mirror_self` in source when set to true. Default false.
 
 * `create_files_via_params`: Similar to `create_files` in source; merged in so that additional (or replaced) files can be specified.
 
+#### Files created by the resource
+
+* `./version`: A file containing the version.
+
+* `./privileged`: A file containing a boolean for if the resource was run with elevated privileges.
+
+* `./rootfs/` and `./metadata.json`: Only populated if mirroring self, contains the rootfs and metadata to run this resource as an image.
+
+* Any files specified by the create files source or param.
+
 ### `out`:
+
+#### Parameters
 
 * `version`: Version to create.
 
