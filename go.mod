@@ -1,7 +1,11 @@
 module github.com/concourse/mock-resource
 
+go 1.16
+
 require (
 	github.com/sirupsen/logrus v1.0.6
-	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b // indirect
-	golang.org/x/sys v0.0.0-20180921163948-d47a0f339242 // indirect
+	github.com/stretchr/testify v1.7.0 // indirect
+	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
+	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
+	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 )
