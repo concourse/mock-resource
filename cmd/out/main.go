@@ -49,7 +49,7 @@ func main() {
 		logrus.Info(req.Source.Log)
 	}
 
-	if req.Params.Version == "" {
+	if req.Params.Version == "" && req.Params.File == "" {
 		logrus.Fatal("no version specified")
 		return
 	}
@@ -60,8 +60,20 @@ func main() {
 		return
 	}
 
-	version := resource.Version{
-		Version: req.Params.Version,
+	var version resource.Version
+	if req.Params.Version == "" {
+		contents, err := os.ReadFile(req.Params.File)
+		if err != nil {
+			logrus.Fatalf("error reading version from file %s: %s", req.Params.File, err)
+			return
+		}
+		version = resource.Version{
+			Version: string(contents),
+		}
+	} else {
+		version = resource.Version{
+			Version: req.Params.Version,
+		}
 	}
 
 	if privileged {
