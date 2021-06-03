@@ -74,6 +74,9 @@ type PutParams struct {
 
 	// print all env vars to stdout
 	PrintEnv bool `json:"print_env"`
+
+	// file whose contents will be the version
+	File string `json:"file"`
 }
 
 type MetadataField struct {

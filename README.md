@@ -73,3 +73,5 @@ Since the mock resource is included as a base resource type, it can be used as t
 * `version`: Version to create.
 
 * `print_env`: Print all environment variables to stdout when set to true. Default false.
+
+* `file`: Contents will be read from the file and emitted as the version
