@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 
 	resource "github.com/concourse/mock-resource"
 	"github.com/sirupsen/logrus"
@@ -44,6 +45,7 @@ func main() {
 		logrus.Fatal("source path is empty")
 		return
 	}
+	sourcePath := os.Args[1]
 
 	if req.Source.Log != "" {
 		logrus.Info(req.Source.Log)
@@ -62,7 +64,8 @@ func main() {
 
 	var version resource.Version
 	if req.Params.Version == "" {
-		contents, err := os.ReadFile(req.Params.File)
+		path := filepath.Join(sourcePath, req.Params.File)
+		contents, err := os.ReadFile(path)
 		if err != nil {
 			logrus.Fatalf("error reading version from file %s: %s", req.Params.File, err)
 			return
