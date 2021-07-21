@@ -17,4 +17,5 @@ FROM scratch AS tests
 FROM ${base_image} AS resource
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
-RUN apt-get update && apt-get -y install wget netcat-openbsd
+RUN apt update && apt upgrade -y -o Dpkg::Options::="--force-confdef"
+RUN apt update && apt -y install wget netcat-openbsd

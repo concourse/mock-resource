@@ -17,4 +17,5 @@ FROM scratch AS tests
 FROM ${base_image}
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
+RUN apk update && apk upgrade
 RUN apk --no-cache add bash wget netcat-openbsd
