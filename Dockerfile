@@ -1,6 +1,8 @@
 ARG base_image
 ARG builder_image=concourse/golang-builder
 
+FROM busybox:uclibc as busybox
+
 FROM ${builder_image} as builder
 COPY . /src
 WORKDIR /src
@@ -15,7 +17,8 @@ RUN go build -o /assets/check ./cmd/check
 FROM scratch AS tests
 
 FROM ${base_image} AS resource
+USER root
 COPY --from=builder assets/ /opt/resource/
+COPY --from=busybox /bin/sh /bin/sh
+COPY --from=busybox /bin/chmod /bin/chmod
 RUN chmod +x /opt/resource/*
-RUN apt update && apt upgrade -y -o Dpkg::Options::="--force-confdef"
-RUN apt update && apt -y install wget netcat-openbsd
