@@ -19,6 +19,5 @@ FROM scratch AS tests
 FROM ${base_image} AS resource
 USER root
 COPY --from=builder assets/ /opt/resource/
-COPY --from=busybox /bin/sh /bin/sh
-COPY --from=busybox /bin/chmod /bin/chmod
+COPY --from=busybox /bin/* /bin
 RUN chmod +x /opt/resource/*
