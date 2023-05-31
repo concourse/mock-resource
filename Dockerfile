@@ -16,5 +16,9 @@ FROM scratch AS tests
 
 FROM ${base_image} AS resource
 USER root
+RUN apt update && apt upgrade -y -o Dpkg::Options::="--force-confdef"
+RUN apt update && apt install -y --no-install-recommends \
+        wget \
+      && rm -rf /var/lib/apt/lists/*
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
