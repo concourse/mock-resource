@@ -1,6 +1,8 @@
 ARG base_image
 ARG builder_image=concourse/golang-builder
 
+FROM busybox:uclibc as busybox
+
 FROM ${builder_image} as builder
 COPY . /src
 WORKDIR /src
@@ -16,9 +18,15 @@ FROM scratch AS tests
 
 FROM ${base_image} AS resource
 USER root
-RUN apt update && apt upgrade -y -o Dpkg::Options::="--force-confdef"
-RUN apt update && apt install -y --no-install-recommends \
-        wget \
-      && rm -rf /var/lib/apt/lists/*
+
+COPY --from=busybox /bin/sleep /bin/
+COPY --from=busybox /bin/printenv /bin/
+COPY --from=busybox /bin/env /bin/
+COPY --from=busybox /bin/mkdir /bin/
+COPY --from=busybox /bin/nslookup /bin/
+COPY --from=busybox /bin/touch /bin/
+COPY --from=busybox /bin/true /bin/
+COPY --from=busybox /bin/false /bin/
+
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
