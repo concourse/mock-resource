@@ -27,6 +27,10 @@ COPY --from=busybox /bin/nslookup /bin/
 COPY --from=busybox /bin/touch /bin/
 COPY --from=busybox /bin/true /bin/
 COPY --from=busybox /bin/false /bin/
+COPY --from=busybox /bin/find /bin/
+COPY --from=busybox /bin/mkfifo /bin/
+COPY --from=busybox /bin/sed /bin/
+COPY --from=busybox /bin/wc /bin/
 
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
