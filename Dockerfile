@@ -12,6 +12,9 @@ RUN go build -o /assets/in ./cmd/in
 RUN go build -o /assets/out ./cmd/out
 RUN go build -o /assets/check ./cmd/check
 
+FROM paketobuildpacks/build-jammy-base as bash-builder
+USER root
+RUN apt-get -y update && apt-get -y install bash-static
 # there are no tests, but all resources must have a 'tests' target, so just
 # no-op
 FROM scratch AS tests
@@ -31,6 +34,8 @@ COPY --from=busybox /bin/find /bin/
 COPY --from=busybox /bin/mkfifo /bin/
 COPY --from=busybox /bin/sed /bin/
 COPY --from=busybox /bin/wc /bin/
+COPY --from=busybox /bin/rm /bin/
+COPY --from=bash-builder /bin/bash-static /bin/bash
 
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
