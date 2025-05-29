@@ -1,7 +1,8 @@
 ARG base_image=cgr.dev/chainguard/wolfi-base
 ARG builder_image=concourse/golang-builder
 
-FROM ${builder_image} AS builder
+ARG BUILDPLATFORM
+FROM --platform=${BUILDPLATFORM} ${builder_image} AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
