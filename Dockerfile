@@ -1,9 +1,13 @@
-ARG base_image
+ARG base_image=cgr.dev/chainguard/wolfi-base
 ARG builder_image=concourse/golang-builder
 
-FROM busybox:uclibc as busybox
+FROM ${builder_image} AS builder
 
-FROM ${builder_image} as builder
+ARG TARGETOS
+ARG TARGETARCH
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
+
 COPY . /src
 WORKDIR /src
 ENV CGO_ENABLED 0
@@ -12,30 +16,11 @@ RUN go build -o /assets/in ./cmd/in
 RUN go build -o /assets/out ./cmd/out
 RUN go build -o /assets/check ./cmd/check
 
-FROM paketobuildpacks/build-jammy-base as bash-builder
-USER root
-RUN apt-get -y update && apt-get -y install bash-static
 # there are no tests, but all resources must have a 'tests' target, so just
 # no-op
 FROM scratch AS tests
 
 FROM ${base_image} AS resource
-USER root
-
-COPY --from=busybox /bin/sleep /bin/
-COPY --from=busybox /bin/printenv /bin/
-COPY --from=busybox /bin/env /bin/
-COPY --from=busybox /bin/mkdir /bin/
-COPY --from=busybox /bin/nslookup /bin/
-COPY --from=busybox /bin/touch /bin/
-COPY --from=busybox /bin/true /bin/
-COPY --from=busybox /bin/false /bin/
-COPY --from=busybox /bin/find /bin/
-COPY --from=busybox /bin/mkfifo /bin/
-COPY --from=busybox /bin/sed /bin/
-COPY --from=busybox /bin/wc /bin/
-COPY --from=busybox /bin/rm /bin/
-COPY --from=bash-builder /bin/bash-static /bin/bash
-
+RUN apk --no-cache add bash
 COPY --from=builder assets/ /opt/resource/
 RUN chmod +x /opt/resource/*
