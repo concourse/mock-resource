@@ -5,6 +5,10 @@ outside world.
 
 All source fields and parameters are optional.
 
+<a href="https://ci.concourse-ci.org/teams/main/pipelines/resource/jobs/build?vars.type=%22mock%22">
+  <img src="https://ci.concourse-ci.org/api/v1/teams/main/pipelines/resource/jobs/build/badge?vars.type=%22mock%22" alt="Build Status">
+</a>
+
 ## Source Configuration
 
 * `mirror_self`: For use on `task.image_resource`, returns itself as an image that tasks can run on.
