@@ -53,7 +53,7 @@ func (s Source) InitialVersion() string {
 
 type Version struct {
 	// an arbitrary version string
-	Version string `json:"version"`
+	Version string `json:"version,omitempty"`
 
 	// emitted in versions when running in a privileged container
 	Privileged string `json:"privileged,omitempty"`
