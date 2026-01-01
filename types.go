@@ -22,7 +22,7 @@ type Source struct {
 	//
 	// contents can either be a string or an arbitrary object (which will be
 	// JSON-marshalled)
-	CreateFiles map[string]interface{} `json:"create_files"`
+	CreateFiles map[string]any `json:"create_files"`
 
 	// an amount of time (in Go duration format) to sleep before the check
 	// returns versions
@@ -65,7 +65,7 @@ type GetParams struct {
 
 	// similar to create_files in source; merged in so that additional (or
 	// replaced) files can be specified
-	CreateFiles map[string]interface{} `json:"create_files_via_params"`
+	CreateFiles map[string]any `json:"create_files_via_params"`
 }
 
 type PutParams struct {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"maps"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -70,7 +70,7 @@ func main() {
 	logrus.Printf("fetching version: %s", req.Version.Version)
 
 	versionFile := filepath.Join(dest, "version")
-	err = ioutil.WriteFile(versionFile, []byte(req.Version.Version+"\n"), os.ModePerm)
+	err = os.WriteFile(versionFile, []byte(req.Version.Version+"\n"), os.ModePerm)
 	if err != nil {
 		logrus.Fatalf("failed to write version file: %s", err)
 		return
@@ -89,15 +89,10 @@ func main() {
 		})
 	}
 
-	files := map[string]interface{}{}
+	files := map[string]any{}
 
-	for path, content := range req.Source.CreateFiles {
-		files[path] = content
-	}
-
-	for path, content := range req.Params.CreateFiles {
-		files[path] = content
-	}
+	maps.Copy(files, req.Source.CreateFiles)
+	maps.Copy(files, req.Params.CreateFiles)
 
 	for path, content := range files {
 		var bs []byte
@@ -126,7 +121,7 @@ func main() {
 			return
 		}
 
-		err = ioutil.WriteFile(filePath, bs, 0644)
+		err = os.WriteFile(filePath, bs, 0644)
 		if err != nil {
 			logrus.Fatalf("failed to write to file '%s': %s", path, err)
 			return
@@ -146,7 +141,7 @@ func replicateTo(rootfs string) {
 		return
 	}
 
-	dirs, err := ioutil.ReadDir("/")
+	dirs, err := os.ReadDir("/")
 	if err != nil {
 		logrus.Fatalf("failed to read /: %s", err)
 		return
@@ -158,7 +153,13 @@ func replicateTo(rootfs string) {
 		switch d.Name() {
 		case "tmp", "dev", "proc", "sys":
 			// prevent recursing and copying wacky stuff
-			err := os.MkdirAll(rootfsDst, d.Mode())
+			info, err := d.Info()
+			if err != nil {
+				logrus.Fatalf("failed to get file info for %s: %s", d.Name(), err)
+				return
+			}
+
+			err = os.MkdirAll(rootfsDst, info.Mode())
 			if err != nil {
 				logrus.Fatalf("failed to create %s: %s", rootfsDst, err)
 				return
@@ -179,7 +180,7 @@ func replicateTo(rootfs string) {
 	}
 }
 
-func encTo(path string, js interface{}) {
+func encTo(path string, js any) {
 	meta, err := os.Create(path)
 	if err != nil {
 		logrus.Fatalf("failed to create %s: %s", path, err)
