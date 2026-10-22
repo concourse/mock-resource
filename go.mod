@@ -1,7 +1,7 @@
 module github.com/concourse/mock-resource
 
-go 1.26.0
+go 1.27.3
 
-require github.com/sirupsen/logrus v1.9.4
+require github.com/sirupsen/logrus v1.10.2
 
-require golang.org/x/sys v0.47.0 // indirect
+require golang.org/x/sys v0.49.0 // indirect
